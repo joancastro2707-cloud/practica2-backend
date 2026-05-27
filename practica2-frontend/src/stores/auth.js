@@ -17,7 +17,6 @@ export const useAuthStore = defineStore('auth', {
         const response = await axios.post('/login', credentials)
         this.token = response.data.token
         this.user = response.data.user
-        
         localStorage.setItem('token', this.token)
         localStorage.setItem('user', JSON.stringify(this.user))
         return { success: true }
@@ -27,27 +26,20 @@ export const useAuthStore = defineStore('auth', {
         this.loading = false
       }
     },
-    async register(userData) {
-      this.loading = true
+    async fetchUser() {
       try {
-        const response = await axios.post('/register', userData)
-        this.token = response.data.token
-        this.user = response.data.user
-        
-        localStorage.setItem('token', this.token)
+        const response = await axios.get('/me')
+        this.user = response.data
         localStorage.setItem('user', JSON.stringify(this.user))
-        return { success: true }
       } catch (error) {
-        throw error.response?.data?.errors || 'Error en el registro'
-      } finally {
-        this.loading = false
+        this.logout()
       }
     },
     async logout() {
       try {
         await axios.post('/logout')
       } catch (error) {
-        console.error('Error al revocar token en servidor', error)
+        console.error('Error al revocar token', error)
       } finally {
         this.token = null
         this.user = null
