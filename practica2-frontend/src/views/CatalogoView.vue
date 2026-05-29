@@ -1,77 +1,82 @@
 <template>
-  <div class="mt-4" style="font-family: sans-serif; padding: 20px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h2 style="font-weight: bold; margin: 0; color: #333;">📦 Catálogo de Productos</h2>
-      <div>
-        <input 
-          v-model="busqueda" 
-          type="text" 
-          placeholder="🔍 Buscar producto por nombre..."
-          style="padding: 10px; width: 280px; border-radius: 6px; border: 2px solid #007bff; outline: none; font-size: 14px;"
-        >
+  <div style="font-family: Arial, sans-serif; background: #f8f9fa; min-height: 100vh; padding: 20px;">
+    <div style="max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
+        <h2 style="color: #1a73e8; margin: 0; font-size: 28px;">📦 Catálogo de Productos</h2>
+        <router-link to="/admin" style="background: #34a853; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px;">+ Agregar Producto</router-link>
       </div>
-    </div>
 
-    <div v-if="productosFiltrados.length === 0" style="padding: 15px; background-color: #fff3cd; color: #856404; border-radius: 4px; border: 1px solid #ffeeba; font-weight: bold;">
-      ⚠️ No se encontraron productos que coincidan con "{{ busqueda }}".
-    </div>
+      <div v-if="cargando" style="text-align: center; padding: 40px;">
+        <div class="loader"></div>
+        <p style="color: #666; margin-top: 15px; font-size: 16px;">Consultando a la API de Laravel...</p>
+      </div>
 
-    <div v-else style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
-      <div v-for="producto in productosFiltrados" :key="producto.id" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-        <h3 style="margin-top: 0; color: #007bff; font-size: 18px; margin-bottom: 10px;">{{ producto.nombre }}</h3>
-        <p style="color: #666; font-size: 14px; line-height: 1.4; height: 40px; overflow: hidden;">{{ producto.descripcion }}</p>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-          <h4 style="color: #28a745; margin: 0; font-size: 20px;">${{ producto.precio.toFixed(2) }}</h4>
-          <span style="font-size: 12px; color: #777; background: #f1f1f1; padding: 3px 8px; border-radius: 12px;">Stock: {{ producto.stock }}</span>
+      <div v-else>
+        <div v-if="productos.length === 0" style="background-color: #fff3cd; color: #856404; padding: 20px; border-radius: 8px; text-align: center; font-size: 16px; border: 1px solid #ffeeba;">
+          No hay productos registrados en la base de datos. ¡Registra el primero en el Panel de Administración!
         </div>
-        <router-link 
-          :to="'/catalogo/' + producto.id" 
-          style="display: block; text-align: center; background: #007bff; color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; margin-top: 15px;"
-        >
-          Ver Detalles del Producto ➡️
-        </router-link>
+
+        <div v-else style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;">
+          <div v-for="producto in productos" :key="producto.id" style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s;">
+            <img 
+              :src="producto.imagen_url || 'https://via.placeholder.com/200'" 
+              :alt="producto.nombre"
+              style="max-width: 100%; height: 180px; object-fit: contain; margin-bottom: 15px; border-radius: 8px;"
+            />
+            <h3 style="margin: 10px 0; font-size: 20px; color: #333; font-weight: 600;">{{ producto.nombre }}</h3>
+            <p style="color: #666; font-size: 14px; height: 42px; overflow: hidden; line-height: 1.4; margin-bottom: 15px;">{{ producto.descripcion }}</p>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 10px; border-radius: 8px; margin-top: 10px;">
+              <span style="color: #28a745; font-weight: bold; font-size: 22px;">${{ producto.precio }}</span>
+              <span style="font-size: 13px; color: #777; background: #e9ecef; padding: 4px 8px; border-radius: 4px;">Stock: {{ producto.stock }}</span>
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'CatalogoView',
-  data() {
-    return {
-      busqueda: '',
-      productos: [
-        {
-          id: 1,
-          nombre: 'Lápiz Técnico HB',
-          descripcion: 'Lápiz de grafito de alta calidad ideal para dibujo técnico y bosquejos arquitectónicos.',
-          precio: 15.50,
-          stock: 120
-        },
-        {
-          id: 2,
-          nombre: 'Cuaderno Profesional Raya',
-          descripcion: 'Cuaderno de 100 hojas con espiral metálico doble y pastas duras protectoras.',
-          precio: 45.00,
-          stock: 85
-        },
-        {
-          id: 3,
-          nombre: 'Memoria USB 64GB Kingston',
-          descripcion: 'Unidad flash USB 3.2 de alta velocidad ideal para resguardar proyectos integradores.',
-          precio: 189.00,
-          stock: 40
-        }
-      ]
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+const productos = ref([])
+const cargando = ref(false)
+
+const cargarProductos = async () => {
+  cargando.value = true
+  try {
+    // Intenta consumir desde el endpoint de tu API en Laravel
+    const res = await axios.get('/api/productos')
+    if (res.data.data) {
+      productos.value = res.data.data
+    } else {
+      productos.value = res.data
     }
-  },
-  computed: {
-    productosFiltrados() {
-      return this.productos.filter(p => 
-        p.nombre.toLowerCase().includes(this.busqueda.toLowerCase())
-      )
-    }
+  } catch (error) {
+    console.error("Error al conectar con Laravel:", error)
+  } finally {
+    cargando.value = false
   }
 }
+
+onMounted(() => {
+  cargarProductos()
+})
 </script>
+
+<style scoped>
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1a73e8;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>

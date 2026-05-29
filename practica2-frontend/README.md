@@ -1,38 +1,77 @@
-# practica2-frontend
+# 🛒 Tienda Online Full-Stack — Proyecto Integrador (UPTex)
 
-This template should help get you started developing with Vue 3 in Vite.
+Aplicación web interactiva con arquitectura desacoplada para la gestión de inventario y carrito de compras distribuido.
 
-## Recommended IDE Setup
+## 🛠️ Tecnologías Utilizadas
+* **Backend:** Laravel 11, Sanctum (Tokens de Autenticación), Eloquent ORM.
+* **Frontend:** Vue.js 3, Pinia (Estado Global), Vue Router, Axios.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## 🚀 Instrucciones de Instalación y Despliegue
 
-## Recommended Browser Setup
+### 1. Servidor de API (Backend)
+1. Ingresa a la carpeta del servidor:
+   ```bash
+   cd backend
+   ```
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+2. Instala los paquetes de PHP:
+   ```bash
+   composer install
+   ```
 
-## Customize configuration
+3. Genera tu llave de cifrado:
+   ```bash
+   php artisan key:generate
+   ```
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+4. Configura tus credenciales de base de datos en el archivo `.env`.
 
-## Project Setup
+5. Ejecuta las migraciones:
+   ```bash
+   php artisan migrate
+   ```
 
-```sh
-npm install
-```
+6. Crear enlace multimedia:
+   ```bash
+   php artisan storage:link
+   ```
 
-### Compile and Hot-Reload for Development
+7. Inicia la API:
+   ```bash
+   php artisan serve
+   ```
 
-```sh
-npm run dev
-```
+---
 
-### Compile and Minify for Production
+### 2. Interfaz de Usuario (Frontend)
+1. Ingresa a la carpeta de la interfaz:
+   ```bash
+   cd frontend
+   ```
 
-```sh
-npm run build
-```
+2. Instala los módulos de Node:
+   ```bash
+   npm install
+   ```
+
+3. Arranca el entorno local reactivo:
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 📦 Funcionalidades Implementadas
+- Gestión de productos
+- Carrito de compras
+- Subida de imágenes de productos
+- Autenticación con Sanctum
+- Panel administrativo
+- Rutas protegidas
+- Arquitectura desacoplada API + SPA
+
+---
+
+## 👨‍💻 Autor
+**Joan Castro Correa**  
+Ingeniería en Sistemas Computacionales — UPTex
