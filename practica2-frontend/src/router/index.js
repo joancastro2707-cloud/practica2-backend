@@ -11,6 +11,13 @@ const router = createRouter({
   routes: [
     { path: '/', name: 'home', component: HomeView },
     { path: '/catalogo', name: 'catalogo', component: CatalogoView },
+
+    // Nueva ruta para carrito
+    { 
+      path: '/carrito', 
+      name: 'carrito', 
+      component: () => import('../views/CartView.vue') 
+    },
     
     // Ruta dinámica mapeada correctamente
     { 
